@@ -1,25 +1,27 @@
-// Conversa com o banco: lista de relatórios e o arquivo de cada um.
-// Quem pode ver é decidido pelo banco (RLS), não por esta página.
+// Conversa com o portal: lista de relatórios e o arquivo de cada um (guardados no Cloudflare R2).
+// Quem pode ver é decidido pelo portal, que confere o login na Central (não esta página).
 window.Dados = (() => {
-    const BALDE = 'relatorios';
-    const COLUNAS = 'id, data, titulo, tema, setor, para_quem, resumo, arquivo';
+    // Dentro do portal o endereço é o mesmo; aberto direto no github.io, fala com o portal.
+    const API = (location.hostname === 'sge-portal.pages.dev' ? '' : 'https://sge-portal.pages.dev') + '/api/relatorios';
 
-    async function listarRelatorios() {
-        const { data, error } = await SGE.cliente()
-            .from('relatorios')
-            .select(COLUNAS)
-            .order('data', { ascending: false })
-            .order('titulo');
-        if (error) throw error;
-        return data || [];
+    async function pedir(caminho) {
+        const { data } = await SGE.cliente().auth.getSession();
+        const token = data && data.session && data.session.access_token;
+        const r = await fetch(`${API}/${caminho}`, { headers: token ? { authorization: `Bearer ${token}` } : {} });
+        if (r.status === 401) throw new Error('Sem acesso aos relatórios. Entre de novo no SGE.');
+        if (!r.ok) throw new Error(`Não consegui falar com o portal (erro ${r.status}).`);
+        return r;
     }
 
-    // Baixa o arquivo e devolve um endereço local (o Storage não mostra HTML direto).
+    async function listarRelatorios() {
+        const lista = await (await pedir('lista')).json();
+        return lista.sort((a, b) => b.data.localeCompare(a.data) || a.titulo.localeCompare(b.titulo, 'pt-BR'));
+    }
+
+    // Baixa o arquivo e devolve um endereço local para o quadro isolado.
     async function abrirArquivo(caminho) {
-        const { data, error } = await SGE.cliente().storage.from(BALDE).download(caminho);
-        if (error) throw error;
-        const html = new Blob([await data.arrayBuffer()], { type: 'text/html;charset=utf-8' });
-        return URL.createObjectURL(html);
+        const html = await (await pedir(`arquivo/${caminho}`)).blob();
+        return URL.createObjectURL(new Blob([html], { type: 'text/html;charset=utf-8' }));
     }
 
     return { listarRelatorios, abrirArquivo };
