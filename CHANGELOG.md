@@ -12,3 +12,6 @@
 - Relatórios saem do Supabase (decisão do Warlison: Supabase só para gestão e controle) e passam a ficar no Cloudflare R2, balde `sge-relatorios`.
 - A tela busca a lista e os arquivos no portal (`/api/relatorios/...`, Portal v1.4.0), que confere o login na Central a cada pedido.
 - `sql/2026-10-16_003_tirar_arquivos_do_supabase.sql` apaga a tabela e a pasta vazias do Supabase.
+
+## v0.2.1 — 2026-10-16
+- Corrige tela em branco: o núcleo comum é `/sge-core-/v1/` (com hífen), não `/sge-core/v1/`.
