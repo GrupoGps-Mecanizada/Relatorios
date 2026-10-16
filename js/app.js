@@ -6,8 +6,8 @@
     const relatorios = await SGE.seguro(() => Dados.listarRelatorios(),
         { contexto: 'carregar os relatórios', texto: 'Carregando relatórios…' });
     if (relatorios === null) {
-        document.getElementById('lista').innerHTML =
-            '<p class="rel-vazio">Não consegui carregar os relatórios. Confira a internet e recarregue a página.</p>';
+        document.getElementById('vazio').textContent =
+            'Não consegui carregar os relatórios. Confira a internet e recarregue a página.';
         return;
     }
     Lista.iniciar(relatorios, Visor.abrir);

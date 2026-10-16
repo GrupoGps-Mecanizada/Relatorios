@@ -12,22 +12,50 @@
 <main class="rel">
   <header class="rel-topo">
     <h1>Relatórios</h1>
-    <p class="rel-sub">Tudo o que o departamento de Apresentações já entregou.</p>
-    <label class="rel-busca">
-      <span class="sr">Buscar relatório</span>
-      <input id="busca" type="search" placeholder="Buscar por título, tema ou equipamento" autocomplete="off">
-    </label>
+    <!-- Abas em cascata: setor (grande) → tema do setor escolhido -->
+    <div class="rel-abas rel-abas-grande" id="abas-setor" role="tablist" aria-label="Setor"></div>
   </header>
+  <div class="rel-abas" id="abas-tema" role="tablist" aria-label="Tema"></div>
 
-  <nav class="rel-filtros" aria-label="Filtros">
-    <div class="rel-linha" id="filtro-setor" role="group" aria-label="Setor"></div>
-    <div class="rel-linha" id="filtro-tema" role="group" aria-label="Tema"></div>
-  </nav>
+  <p class="rel-numeros" id="numeros" aria-live="polite"></p>
 
-  <p class="rel-contagem" id="contagem" aria-live="polite"></p>
-  <section id="lista" class="rel-lista" aria-busy="true">
-    <p class="rel-vazio">Carregando relatórios…</p>
-  </section>
+  <div class="rel-filtros" role="group" aria-label="Filtros">
+    <label class="rel-pilula rel-ativa">
+      <span class="rel-suave">Período</span>
+      <select id="periodo" aria-label="Período">
+        <option value="tudo">Tudo</option>
+        <option value="mes">Este mês</option>
+        <option value="3m">Últimos 3 meses</option>
+        <option value="ano">Este ano</option>
+      </select>
+      <span class="rel-suave" aria-hidden="true">▾</span>
+    </label>
+    <span id="pilulas"></span>
+    <div class="rel-mais" id="mais-filtro">
+      <button type="button" class="rel-pilula rel-tracejada" id="mais-filtro-botao" aria-haspopup="menu" aria-expanded="false">+ Filtro</button>
+      <div class="rel-menu" id="mais-filtro-menu" role="menu" hidden></div>
+    </div>
+    <input id="busca" class="rel-busca" type="search" aria-label="Buscar" placeholder="Buscar título, equipamento, resumo…" autocomplete="off">
+  </div>
+
+  <div class="rel-corpo" id="corpo">
+    <section class="rel-lista" aria-label="Lista de relatórios">
+      <table class="rel-tabela">
+        <thead>
+          <tr>
+            <th class="col-data">Data</th>
+            <th>Relatório</th>
+            <th class="col-tema">Tema</th>
+            <th class="col-setor">Setor</th>
+            <th class="col-para">Para quem</th>
+          </tr>
+        </thead>
+        <tbody id="linhas"></tbody>
+      </table>
+      <p class="rel-vazio" id="vazio">Carregando relatórios…</p>
+    </section>
+    <aside class="rel-detalhe" id="detalhe" aria-label="Detalhe do relatório" hidden></aside>
+  </div>
 </main>
 
 <div class="rel-visor" id="visor" hidden>

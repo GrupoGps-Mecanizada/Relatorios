@@ -15,3 +15,6 @@
 
 ## v0.2.1 — 2026-10-16
 - Corrige tela em branco: o núcleo comum é `/sge-core-/v1/` (com hífen), não `/sge-core/v1/`.
+
+## v0.3.0 — 2026-10-16
+- Tela refeita no desenho da Gestão de alertas (pedido do Warlison): título grande, **abas em cascata** (setor com contagem → temas do setor), números em linha, filtro de período e "+ Filtro" (ano, para quem) em pílulas com contagem, busca, tabela sem grade e **detalhe ao lado** com "Abrir relatório".
